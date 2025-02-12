@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  firstname String
+  lastname  String
+  username  String   @unique
+  role      Role
+  createdAt DateTime @default(now())
+
+  reviews  Review[]
+  bookings Booking[]
+  contacts Contact[]
+}
+
+enum Role {
+  utilisateur
+  employe
+  administrateur
+}
+
+model Movie {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String?
+  minimumAge   Int
+  posterUrl    String
+  isFavorite   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  backdropPath String?
+  genre        String
+
+  reviews Review[]
+  seances Seance[]
+}
+
+model Cinema {
+  id      Int    @id @default(autoincrement())
+  name    String
+  address String
+  city    String
+  country String
+
+  rooms Room[]
+}
+
+model Room {
+  id                Int               @id @default(autoincrement())
+  numero            Int
+  capacite          Int
+  cinema            Cinema            @relation(fields: [cinemaId], references: [id])
+  cinemaId          Int
+  qualityProjection QualityProjection
+
+  seances   Seance[]
+  incidents Incident[]
+}
+
+enum QualityProjection {
+  FOUR_DX // 4DX
+  THREE_D // 3D
+  FOUR_K //4K
+}
+
+model Seance {
+  id                Int               @id @default(autoincrement())
+  movie             Movie             @relation(fields: [movieId], references: [id])
+  movieId           Int
+  room              Room              @relation(fields: [roomId], references: [id])
+  roomId            Int
+  startTime         DateTime
+  endTime           DateTime
+  qualityProjection QualityProjection
+
+  bookings Booking[]
+}
+
+model Booking {
+  id            Int           @id @default(autoincrement())
+  user          User          @relation(fields: [userId], references: [id])
+  userId        Int
+  seance        Seance        @relation(fields: [seanceId], references: [id])
+  seanceId      Int
+  numberOfSeats Int
+  bookingSeats  Int
+  totalPrice    Decimal
+  statut        BookingStatus
+}
+
+enum BookingStatus {
+  confirmé
+  annulé
+  utilisé
+}
+
+model Review {
+  id         Int          @id @default(autoincrement())
+  user       User         @relation(fields: [userId], references: [id])
+  userId     Int
+  movie      Movie        @relation(fields: [movieId], references: [id])
+  movieId    Int
+  rating     Int
+  comment    String
+  dateReview DateTime     @default(now())
+  statut     ReviewStatus
+}
+
+enum ReviewStatus {
+  en_attente
+  validé
+  refusé
+}
+
+model Incident {
+  id              Int            @id @default(autoincrement())
+  room            Room           @relation(fields: [roomId], references: [id])
+  roomId          Int
+  description     String
+  statut          IncidentStatus
+  dateSignalement DateTime       @default(now())
+}
+
+enum IncidentStatus {
+  en_attente
+  résolu
+}
+
+model Contact {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  title       String
+  message     String
+  dateMessage DateTime @default(now())
+}
