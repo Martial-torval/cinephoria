@@ -1,19 +1,22 @@
 "use client";
-// Swiper.JS
+// Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperCore } from "swiper";
-import { Pagination } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
+
 import "swiper/css";
 import "swiper/css/pagination";
-// Hook
+import "swiper/css/autoplay";
+
 import { useEffect, useState } from "react";
-// Types
-import { MovieType } from "../types/movie";
-// Next.js Image
+import { MovieType } from "@/types/movie";
 import Image from "next/image";
 import CardMovie from "./CardMovie";
 import { Instrument_Serif } from "next/font/google";
-import { fetchMovies } from "../utils/api";
+import { fetchMovies } from "@/utils/api";
+import Link from "next/link";
+import { slugify } from "@/utils/format";
+
 const instrument_serif = Instrument_Serif({
   weight: "400",
   subsets: ["latin"],
@@ -26,8 +29,10 @@ export default function MovieCarousel() {
 
   useEffect(() => {
     const loadMovies = async () => {
-      const moviesData = await fetchMovies();
+      setLoading(true);
+      const moviesData = (await fetchMovies()) as MovieType[];
       setMovies(moviesData);
+      console.log("moviesData:", moviesData);
       setLoading(false);
     };
     loadMovies();
@@ -35,39 +40,47 @@ export default function MovieCarousel() {
 
   if (loading)
     return <p className="text-center text-xl">Chargement des films...</p>;
+  if (movies.length === 0) return <p>Aucun film disponible.</p>;
 
   return (
     <>
       <Swiper
         slidesPerView={1}
         spaceBetween={20}
-        modules={[Pagination]}
-        loop
-        autoplay
+        modules={[Pagination, Autoplay]}
+        loop={true}
+        autoplay={false}
+        // autoplay={{ delay: 4000, disableOnInteraction: false }}
         className="relative"
-        onSwiper={setSwiperInstance}
+        touchStartPreventDefault={false}
+        touchMoveStopPropagation={false}
+        onSwiper={(sw) => setSwiperInstance(sw)}
       >
-        {movies.slice(7).map((movie) => (
+        {movies.map((movie) => (
           <SwiperSlide key={movie.id} className="h-full">
-            <CardMovie
-              className="p-4 bg-no-repeat bg-cover text-primary w-full flex flex-col justify-end relative h-[70vh]"
-              id={movie.id}
-              title={movie.title}
-              releaseDate={movie.releaseDate}
-              description={movie.description}
-              descriptionClassName="lg:text-2xl text-base lg:w-1/2 md:w-2/3"
-              createdAt={movie.createdAt}
-              posterUrl={movie.backdropPath}
-              voteAverage={movie.voteAverage}
-              isAdult={movie.isAdult}
-              minimumAge={movie.minimumAge}
-              genre_list={movie.genre_list}
-              backdropPath={movie.backdropPath}
-            />
+            <Link
+              href={`/films/${slugify(movie.title)}?movieId=${movie.id}`}
+              className="h-full"
+            >
+              <CardMovie
+                className="p-4 bg-no-repeat bg-cover text-primary w-full flex flex-col justify-end relative h-[70vh]"
+                id={movie.id}
+                title={movie.title}
+                description={movie.description}
+                descriptionClassName="lg:text-2xl text-base lg:w-1/2 md:w-2/3"
+                posterUrl={movie.posterUrl}
+                isAdult={movie.isAdult}
+                minimumAge={movie.minimumAge}
+                genre_list={movie.genre}
+                isFavorite={movie.isFavorite}
+                rating={movie.rating}
+              />
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="flex gap-2 mt-4 lg:flex-row md:flex-col flex-col lg:items-start md:items-start">
+
+      <div className="flex gap-2 mt-4 whitespace-nowrap lg:flex-row md:flex-col flex-col lg:items-start md:items-start ">
         <h4
           className={
             instrument_serif.className +
@@ -76,19 +89,24 @@ export default function MovieCarousel() {
         >
           Derniers films ajoutés :
         </h4>
-        <div>
-          {movies.slice(7).map((movie, index) => (
+
+        <div
+          className="flex gap-2 w-full max-w-full overflow-x-auto overflow-y-hidden"
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+        >
+          {movies.map((movie, index) => (
             <button
               key={movie.id}
-              onClick={() => swiperInstance?.slideTo(index)} // Change de slide au clic
-              className="w-16 h-24 relative rounded-md overflow-hidden border-2 border-transparent hover:border-white transition"
+              onClick={() => swiperInstance?.slideToLoop(index)}
+              className="flex-shrink-0 lg:w-16 md:w-24 w-24 h-24 relative rounded-md border-2 border-transparent hover:border-white transition"
             >
               <Image
                 src={movie.posterUrl}
                 alt={movie.title}
-                layout="fill"
-                objectFit="cover"
+                style={{ objectFit: "cover" }}
                 className="rounded-md"
+                fill
               />
             </button>
           ))}

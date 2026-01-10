@@ -7,29 +7,47 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "tsx prisma/seed.ts"
   },
+  "prisma": {},
   "dependencies": {
-    "@prisma/client": "^6.3.1",
+    "@borase-healthcare-limited/react-native-horizontal-calender": "^1.1.9",
+    "@meinefinsternis/react-horizontal-date-picker": "^1.0.1",
+    "@prisma/client": "^6.15.0",
+    "@seatmap.pro/renderer": "^1.47.0",
+    "bcrypt": "^6.0.0",
+    "better-auth": "^1.3.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.5.0",
     "hamburger-react": "^2.5.2",
     "lucide-react": "^0.475.0",
     "motion": "^12.4.2",
     "next": "15.1.6",
     "next-auth": "^4.24.11",
+    "nodemailer": "^6.10.1",
     "pg": "^8.13.1",
-    "prisma": "^6.3.1",
+    "prisma": "^6.15.0",
     "react": "^19.0.0",
+    "react-calender-horizontal": "^1.0.12",
     "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.6.0",
     "swiper": "^11.2.2",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
-    "usehooks-ts": "^3.1.1"
+    "usehooks-ts": "^3.1.1",
+    "uuid": "^13.0.0",
+    "validation-better-auth": "^1.3.4",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/bcrypt": "^6.0.0",
+    "@types/formidable": "^3.4.5",
     "@types/node": "^20",
+    "@types/nodemailer": "^7.0.1",
     "@types/pg": "^8.11.11",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -38,6 +56,7 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
   }
 }

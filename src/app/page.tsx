@@ -1,9 +1,10 @@
-import MovieCarousel from "@components/MovieCarousel";
+// app/page.tsx
+import MovieCarousel from "@/components/MovieCarousel";
 
 export default function Home() {
   return (
-    <main className="h-full">
+    <>
       <MovieCarousel />
-    </main>
+    </>
   );
 }

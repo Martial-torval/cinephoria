@@ -4,5 +4,7 @@ export interface CinemaType {
   address: string;
   city: string;
   country: string;
+  image: string;
+  seanceId: number;
   rooms: number[];
 }

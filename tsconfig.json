@@ -1,14 +1,18 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES2022",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -18,16 +22,42 @@
         "name": "next"
       }
     ],
-    // "paths": {
-    //   "@components/* ": ["./src/app/component/*"]
-    // }
-    "baseUrl": "src/",
+    "baseUrl": ".",
     "paths": {
-      "@public/*": ["public/*"],
-      "@components/*": ["app/components/*"],
-      "@types/*": ["app/types/*"]
+      "@/*": [
+        "src/app/*"
+      ],
+      "@/prisma" : [
+        "prisma/*"
+      ],
+      "@/public/*": [
+        "public/*"
+      ],
+      "@/components/*": [
+        "src/app/components/*"
+      ],
+      "@/types/*": [
+        "src/app/types/*"
+      ],
+      "@/context/*": [
+        "src/app/context/*"
+      ],
+      "@/utils/*": [
+        "src/app/utils/*"
+      ],
+      "@/lib/*": [
+        "src/app/lib/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/script.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "prisma/**/*.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

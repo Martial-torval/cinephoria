@@ -1,16 +1,23 @@
+import { CinemaType } from "./cinema";
+import ShowType from "./show";
+
 export interface MovieType {
   id: number;
   title: string;
   description: string;
   posterUrl: string;
-  backdropPath: string;
   createdAt: string;
   voteAverage: number;
-  genre_list: string;
+  genre: string[];
   minimumAge?: number;
-  releaseDate?: string;
   isAdult: boolean;
+  isFavorite: boolean;
   className?: string;
-  key?: number;
+  rating?: number;
+  rate: number;
+  // key?: number;
   descriptionClassName?: string;
+  qualityProjection?: string;
+  cinemas?: CinemaType[];
+  seances?: ShowType[];
 }
