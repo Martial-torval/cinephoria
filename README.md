@@ -5,6 +5,7 @@
 Ce dépôt contient un projet **Next.js** servant de **référence fonctionnelle et technique** afin d’être **reproduit en Angular**.
 
 L’objectif n’est **pas** de réutiliser le code tel quel, mais de :
+
 - Comprendre l’architecture globale
 - Identifier les fonctionnalités
 - Reproduire les écrans, la logique métier et les flux en Angular
@@ -22,11 +23,13 @@ L’objectif n’est **pas** de réutiliser le code tel quel, mais de :
 ## 🛠 Stack technique
 
 ### Frontend
+
 - **Next.js** (React)
 - **TypeScript**
 - **CSS / SCSS / Tailwind** (selon le cas)
 
 ### Outils
+
 - Node.js >= 18
 - npm ou yarn
 
@@ -46,6 +49,7 @@ npm run dev
 ```
 
 Le projet sera accessible sur :
+
 ```
 http://localhost:3000
 ```
@@ -56,41 +60,42 @@ http://localhost:3000
 
 ```
 .
-├── app/                # Routing et pages (Next.js App Router)
-│   ├── layout.tsx      # Layout global (équivalent AppComponent Angular)
-│   ├── page.tsx        # Page principale
-│   └── ...
-├── components/         # Composants réutilisables
-├── services/           # Logique métier / appels API
-├── hooks/              # Hooks React (équivalent logique services Angular)
-├── styles/             # Styles globaux
+├── src/app/            # Routing et pages (Next.js App Router)
+│   ├── layout.tsx        # Layout global (équivalent AppComponent Angular)
+│   ├── page.tsx          # Page principale
+│   └── components/*      # Componsants UI Réutilisables
+│   └── utils/api         # Logique métier / appels API
+│   └── lib/*             # librairies
+├── prisma/*            # ORM + Schema model DB
 ├── public/             # Assets statiques
 └── README.md
 ```
 
 👉 **Équivalence Angular suggérée** :
 
-| Next.js | Angular |
-|-------|--------|
-| app/page.tsx | Composant + route |
-| layout.tsx | AppComponent / Layout |
-| components/ | Shared Components |
-| services/ | Services Angular |
-| hooks/ | Services + RxJS |
+| Next.js      | Angular               |
+| ------------ | --------------------- |
+| app/page.tsx | Composant + route     |
+| layout.tsx   | AppComponent / Layout |
+| components/  | Shared Components     |
+| services/    | Services Angular      |
+| hooks/       | Services + RxJS       |
 
 ---
 
 ## 🧭 Routing
 
 - Next.js utilise un **routing par fichiers**
-- Chaque dossier dans `app/` correspond à une route
+- Chaque dossier dans `src/app/` correspond à une route
 
 Exemple :
+
 ```
 app/dashboard/page.tsx → /dashboard
 ```
 
 👉 En Angular :
+
 - Reproduire via `app-routing.module.ts`
 - 1 page Next.js = 1 composant Angular
 
@@ -101,11 +106,13 @@ app/dashboard/page.tsx → /dashboard
 Les composants sont **présentationnels autant que possible**.
 
 Exemple :
+
 - `Button.tsx`
 - `Modal.tsx`
 - `Navbar.tsx`
 
 👉 En Angular :
+
 - Créer des composants dans un `SharedModule`
 - Inputs / Outputs = props React
 
@@ -117,6 +124,7 @@ Exemple :
 - Pas de store global complexe (Redux, Zustand, etc.)
 
 👉 En Angular :
+
 - Services singleton
 - Observables (RxJS)
 - `BehaviorSubject` si nécessaire
@@ -126,19 +134,22 @@ Exemple :
 ## 🌐 Appels API
 
 Les appels API sont regroupés dans :
+
 ```
-/services
+/utils/api
 ```
 
 Exemple :
+
 ```ts
 export const getUsers = async () => {
-  const res = await fetch('/api/users')
-  return res.json()
-}
+  const res = await fetch("/api/users");
+  return res.json();
+};
 ```
 
 👉 En Angular :
+
 - `HttpClient`
 - Services dédiés
 - Gestion des erreurs avec interceptors
@@ -151,6 +162,7 @@ export const getUsers = async () => {
 - Token stocké en mémoire ou localStorage
 
 👉 En Angular :
+
 - AuthService
 - Guard de routes
 
@@ -158,10 +170,11 @@ export const getUsers = async () => {
 
 ## 🎨 Styles
 
-- Styles globaux dans `styles/`
-- Styles locaux par composant
+- Styles globaux dans `globals.css`
+- Styles locaux par composant en tailwind.
 
 👉 En Angular :
+
 - Styles par composant (`.component.scss`)
 - Ou styles globaux dans `styles.scss`
 
@@ -170,9 +183,11 @@ export const getUsers = async () => {
 ## 🧪 Tests (optionnel)
 
 Actuellement :
+
 - Peu ou pas de tests
 
 👉 En Angular :
+
 - Jasmine / Karma ou Jest
 
 ---
@@ -214,6 +229,7 @@ Cette section explique **dossier par dossier** l’architecture du projet Next.j
 ## public/
 
 ### public/uploads
+
 - Contient les fichiers uploadés (affiches de films, images diverses)
 - Servi statiquement par Next.js
 
@@ -226,14 +242,17 @@ Cette section explique **dossier par dossier** l’architecture du projet Next.j
 Dossier principal utilisant **Next.js App Router**. Chaque dossier correspond à une route.
 
 ### (auth)/
+
 Groupe de routes d’authentification (non visible dans l’URL).
 
 #### connexion/page.tsx
+
 - Page de connexion (US 7)
 - Formulaire login / mot de passe
 - Redirection après connexion selon l’action initiale
 
 #### inscription/page.tsx
+
 - Création de compte utilisateur (US 6)
 - Validation du mot de passe
 - Envoi de mail de confirmation
@@ -243,18 +262,22 @@ Groupe de routes d’authentification (non visible dans l’URL).
 ---
 
 ### forgot-password/page.tsx
+
 - Mot de passe oublié (US 11)
 - Génération automatique et envoi par mail
 
 ### reset-password/page.tsx
+
 - Modification obligatoire du mot de passe après reset
 
 ### verify-email/page.tsx
+
 - Validation du compte après inscription via lien mail
 
 ---
 
 ### admin/page.tsx
+
 - Espace Administrateur (US 8)
 - Gestion films, séances, salles
 - Création comptes employés
@@ -265,6 +288,7 @@ Groupe de routes d’authentification (non visible dans l’URL).
 ---
 
 ### intranet/page.tsx
+
 - Espace Employé (US 9)
 - Gestion films, séances, salles
 - Validation / suppression des avis
@@ -274,6 +298,7 @@ Groupe de routes d’authentification (non visible dans l’URL).
 ---
 
 ### mon-espace/page.tsx
+
 - Espace Utilisateur (US 10)
 - Consultation des commandes
 - Dépôt d’avis après séance passée
@@ -283,6 +308,7 @@ Groupe de routes d’authentification (non visible dans l’URL).
 ---
 
 ### films/page.tsx
+
 - Liste de tous les films (US 5)
 - Affichage infos film + note
 - Filtres : cinéma, genre, jour
@@ -293,6 +319,7 @@ Groupe de routes d’authentification (non visible dans l’URL).
 ### reservations/
 
 Dossier découpé en **plusieurs segments** représentant les étapes de réservation (US 4) :
+
 - choix cinéma
 - choix film
 - choix séance
@@ -304,6 +331,7 @@ Dossier découpé en **plusieurs segments** représentant les étapes de réserv
 ---
 
 ### contact/page.tsx
+
 - Formulaire de contact (US 12)
 - Envoi d’email vers boîte générique Cinéphoria
 
@@ -314,41 +342,51 @@ Dossier découpé en **plusieurs segments** représentant les étapes de réserv
 Routes API Next.js (Backend intégré).
 
 ### api/auth
+
 - Connexion, inscription
 - Vérification email
 - Reset mot de passe
 
 ### api/users
+
 - Gestion utilisateurs
 - Rôles (user, employé, admin)
 
 ### api/cinemas
+
 - Gestion des cinémas (France / Belgique)
 
 ### api/movies
+
 - CRUD films
 - Labels, genres, âge minimum
 
 ### api/shows
+
 - Séances (horaires, film, salle, qualité)
 
 ### api/room
+
 - Gestion des salles
 - Nombre de places
 - Places PMR
 
 ### api/reservations
+
 - Création et consultation des réservations
 - Vérification des places disponibles
 
 ### api/reviews
+
 - Avis utilisateurs
 - Validation employé
 
 ### api/contact
+
 - Réception et traitement des messages contact
 
 ### api/upload
+
 - Upload fichiers (affiches)
 
 👉 Angular : backend séparé (NestJS / Spring / autre)
@@ -367,29 +405,37 @@ Routes API Next.js (Backend intégré).
 ## src/lib/
 
 ### lib/db.ts / prisma.ts
+
 - Connexion base de données
 - ORM Prisma
 
 ### lib/auth.ts
+
 - Logique d’authentification
 - Vérification session / rôles
 
 ### lib/auth-client.ts
+
 - Helpers côté client pour auth
 
 ### lib/auth.plugins.ts
+
 - Extensions / middlewares auth
 
 ### lib/mail.ts
+
 - Envoi des emails (confirmation, reset, contact)
 
 ### lib/schemas/
+
 - Validation des données (Zod)
 
 #### auth.ts
+
 - Schémas login / register / password
 
 #### movie.ts
+
 - Schéma film
 
 👉 Angular : Validators + DTOs
@@ -408,18 +454,23 @@ Routes API Next.js (Backend intégré).
 ## src/utils/
 
 ### api.ts
+
 - Centralisation des appels API frontend
 
 ### enum.ts
+
 - Enums globaux (rôles, statuts, qualités)
 
 ### genre.ts
+
 - Helpers liés aux genres de films
 
 ### sendEmail.ts
+
 - Utilitaire envoi mail
 
 ### uploadFile.ts
+
 - Gestion upload fichiers
 
 👉 Angular : services dédiés
@@ -428,14 +479,14 @@ Routes API Next.js (Backend intégré).
 
 ## 🧩 Mapping global Next.js → Angular
 
-| Next.js | Angular |
-|-------|--------|
-| app/ | modules + routing |
-| page.tsx | composant |
-| api/ | backend REST |
-| lib/ | core services |
-| components/ | shared components |
-| utils/ | services / helpers |
+| Next.js     | Angular            |
+| ----------- | ------------------ |
+| app/        | modules + routing  |
+| page.tsx    | composant          |
+| api/        | backend REST       |
+| lib/        | core services      |
+| components/ | shared components  |
+| utils/      | services / helpers |
 
 ---
 
@@ -451,6 +502,7 @@ Cette section explique les **principales dépendances utilisées**, leur rôle d
 ## ⚛️ Framework & cœur applicatif
 
 ### next (v15)
+
 - Framework React fullstack
 - Gestion du routing, SSR, API routes
 
@@ -459,6 +511,7 @@ Cette section explique les **principales dépendances utilisées**, leur rôle d
 ---
 
 ### react / react-dom (v19)
+
 - Bibliothèque UI
 - Rendu des composants et gestion du DOM
 
@@ -469,6 +522,7 @@ Cette section explique les **principales dépendances utilisées**, leur rôle d
 ## 🔐 Authentification & sécurité
 
 ### next-auth
+
 - Gestion de l’authentification (sessions, cookies)
 - Protection des routes
 
@@ -477,6 +531,7 @@ Cette section explique les **principales dépendances utilisées**, leur rôle d
 ---
 
 ### better-auth / validation-better-auth
+
 - Logique d’authentification personnalisée
 - Validation avancée des credentials
 
@@ -485,6 +540,7 @@ Cette section explique les **principales dépendances utilisées**, leur rôle d
 ---
 
 ### bcrypt
+
 - Hashage des mots de passe
 - Sécurité des comptes utilisateurs
 
@@ -497,11 +553,13 @@ Cette section explique les **principales dépendances utilisées**, leur rôle d
 ### Architecture serverless
 
 Le projet adopte une **architecture serverless** :
+
 - Aucune infrastructure serveur dédiée
 - Les API Next.js sont déployables en fonctions serverless
 - La base de données est **hébergée à distance**
 
 👉 Cela permet :
+
 - Scalabilité automatique
 - Réduction des coûts
 - Simplicité de déploiement
@@ -515,17 +573,20 @@ Le projet adopte une **architecture serverless** :
 - Compatible avec Prisma
 
 Neon fournit :
+
 - Démarrage à froid rapide
 - Branching de base (utile pour tests)
 - Haute disponibilité
 
 👉 Angular :
+
 - Aucun accès direct à la base
 - Communication via API backend (REST)
 
 ---
 
 ### prisma / @prisma/client
+
 - ORM pour base PostgreSQL
 - Gestion des modèles et migrations
 
@@ -534,6 +595,7 @@ Neon fournit :
 ---
 
 ### pg
+
 - Driver PostgreSQL
 
 ---
@@ -541,6 +603,7 @@ Neon fournit :
 ## ✉️ Emails
 
 ### nodemailer
+
 - Envoi des emails :
   - confirmation de compte
   - reset mot de passe
@@ -553,6 +616,7 @@ Neon fournit :
 ## 📅 Dates & planning
 
 ### dayjs
+
 - Manipulation des dates
 - Calcul des séances, jours, horaires
 
@@ -561,8 +625,11 @@ Neon fournit :
 ---
 
 ### react-calender-horizontal
+
 ### @borase-healthcare-limited/react-native-horizontal-calender
+
 ### @meinefinsternis/react-horizontal-date-picker
+
 - Sélecteurs de dates horizontaux
 - Utilisés pour le choix des séances
 
@@ -573,6 +640,7 @@ Neon fournit :
 ## 🎟 Réservation & sièges
 
 ### @seatmap.pro/renderer
+
 - Rendu interactif du plan de salle
 - Sélection des sièges (PMR inclus)
 
@@ -583,12 +651,15 @@ Neon fournit :
 ## 🎨 UI / UX
 
 ### tailwindcss
+
 - Framework CSS utilitaire
 
 ### tailwind-merge
+
 - Fusion intelligente des classes Tailwind
 
 ### tailwindcss-animate
+
 - Animations CSS
 
 👉 Angular : Tailwind possible ou Angular Material
@@ -596,6 +667,7 @@ Neon fournit :
 ---
 
 ### class-variance-authority / clsx
+
 - Gestion conditionnelle des classes CSS
 
 👉 Angular : ngClass
@@ -603,6 +675,7 @@ Neon fournit :
 ---
 
 ### lucide-react
+
 - Icônes SVG
 
 👉 Angular : lucide-angular / material icons
@@ -610,11 +683,13 @@ Neon fournit :
 ---
 
 ### hamburger-react
+
 - Bouton menu responsive
 
 ---
 
 ### swiper
+
 - Sliders / carrousels
 - Films en page d’accueil
 
@@ -623,6 +698,7 @@ Neon fournit :
 ---
 
 ### motion
+
 - Animations (équivalent Framer Motion)
 
 👉 Angular : Angular Animations
@@ -630,6 +706,7 @@ Neon fournit :
 ---
 
 ### react-hot-toast
+
 - Notifications (succès, erreurs)
 
 👉 Angular : Snackbar / Toast service
@@ -637,6 +714,7 @@ Neon fournit :
 ---
 
 ### usehooks-ts
+
 - Hooks utilitaires (debounce, localStorage, etc.)
 
 👉 Angular : services utilitaires
@@ -646,6 +724,7 @@ Neon fournit :
 ## 🧪 Validation & typage
 
 ### zod
+
 - Validation des formulaires et données API
 
 👉 Angular : Validators + DTO
@@ -653,6 +732,7 @@ Neon fournit :
 ---
 
 ### uuid
+
 - Génération d’identifiants uniques
 
 ---
@@ -660,15 +740,19 @@ Neon fournit :
 ## 🛠 Outils de développement
 
 ### typescript
+
 - Typage strict
 
 ### eslint / eslint-config-next
+
 - Linting
 
 ### tailwindcss / postcss
+
 - Build CSS
 
 ### tsx / ts-node
+
 - Exécution scripts TypeScript (seed Prisma)
 
 ---
@@ -685,4 +769,3 @@ npm run seed       # Seed base de données
 ---
 
 Cette liste permet à un développeur Angular de **comprendre pourquoi chaque dépendance existe** et de savoir **quoi remplacer ou adapter** dans l’écosystème Angular.
-
