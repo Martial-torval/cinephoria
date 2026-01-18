@@ -38,14 +38,19 @@ L’objectif n’est **pas** de réutiliser le code tel quel, mais de :
 ## 🚀 Installation & lancement
 
 ```bash
-# Cloner le dépôt
+1) # Cloner le dépôt
 git clone <URL_DU_REPO>
 
-# Installer les dépendances
-npm install
+
+```bash
+1) npm install -g pnpm
+2) pnpm install
+3) pnpm prisma generate
+4) (optionnel) pnpm prisma migrate dev
+
 
 # Lancer le projet en local
-npm run dev
+1) pnpm run dev
 ```
 
 Le projet sera accessible sur :
